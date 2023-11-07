@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import org.mariuszgromada.math.mxparser.Expression
+import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -39,13 +41,26 @@ class MainActivity : AppCompatActivity() {
             input.text = "${input.text}$button_txt";
         }
 
-        fun resulta(){
-
+        fun resulta() {
+            try {
+                var exp = input.text.toString()
+                val result = Expression(exp).calculate()
+                if (result.isNaN()) {
+                    output.text = "error"
+                } else {
+                    output.text = DecimalFormat("0.####").format(result).toString()
+                }
+            } catch (e: Exception) {
+                println(e)
+            }
         }
 
         button_clear.setOnClickListener {
             input.text = " "
             output.text = " "
+        }
+        button_egale.setOnClickListener {
+            resulta()
         }
         button_braket_left.setOnClickListener {
             add_to_input("(")
